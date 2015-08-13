@@ -1,0 +1,57 @@
+__author__ = 'dchekhonin'
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+import pprint
+
+driver = webdriver.Chrome()
+driver.get("https://buzzfeed.atlassian.net")
+
+def assert_checkbox_status(id, expect):
+    global driver
+    field = driver.find_element_by_id(id)
+    assert field.get_attribute('checked') == expect
+
+
+element = driver.find_element_by_id("username")
+element.send_keys("<username>")
+element = driver.find_element_by_id("password")
+element.send_keys("<blablabla>")
+
+assert_checkbox_status('remember-me',None)
+
+#element = driver.find_element_by_xpath(".//*[@type='hidden']").text
+
+elements_array=(driver.find_elements_by_xpath(".//*[@type='hidden']"))
+count = len(elements_array)
+print(count)
+
+element = driver.find_element_by_id("login").click()
+time.sleep(5)
+
+elements_array1=(driver.find_elements_by_xpath(".//*[@id='gadget-10002']//tbody/tr"))
+#elements_array1 = (driver.find_elements_by_class_name('issuerow'))
+count1 = len(elements_array1)
+print(count1)
+count2 = (driver.find_element_by_xpath(".//*[@id='gadget-10002']//span[2]").text)
+print (count2)
+count3 = (driver.find_element_by_xpath(".//*[@id='gadget-10002']//div[1]/a").text)
+print (count3)
+assert count1 <= count2 and count1 <= count3
+
+elements_array2=(driver.find_elements_by_xpath(".//*[@id='gadget-11400']//tbody/tr"))
+count4 = len(elements_array2)
+print(count4)
+count5 = (driver.find_element_by_xpath(".//*[@id='gadget-11400']//div/span[2]").text)
+print (count5)
+count6 = (driver.find_element_by_xpath(".//*[@id='gadget-11400']//div/a").text)
+print (count6)
+assert count4 <= count5 and count4 <= count6
+
+
+
+
+
+
+driver.close()
