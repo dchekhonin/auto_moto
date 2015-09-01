@@ -1,0 +1,99 @@
+__author__ = 'dchekhonin'
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
+import time
+import pprint
+import math
+import pytest
+
+driver = webdriver.Chrome()
+driver.get("https://buzzfeed.atlassian.net")
+
+count1 = 0
+
+def test_login():
+    
+    def assert_checkbox_status(id, expect):
+        global driver
+        field = driver.find_element_by_id(id)
+        assert field.get_attribute('checked') == expect
+
+
+    element = driver.find_element_by_id("username")
+    element.send_keys("dmitriy.chekhonin")
+    element = driver.find_element_by_id("password")
+    element.send_keys("D68y12166")
+
+    elements_array = (driver.find_elements_by_xpath(".//*[@type='hidden']"))
+    count = len(elements_array)
+    print(count)
+
+    assert_checkbox_status('remember-me', None)
+
+    element = driver.find_element_by_id("login").click()
+    time.sleep(3)
+
+
+def test_counts():
+
+    elements_array1 = (driver.find_elements_by_xpath(".//*[@id='gadget-10002']//tbody/tr"))
+#elements_array1 = (driver.find_elements_by_class_name('issuerow'))
+    count1 = len(elements_array1)
+    print(count1)
+    count2 = (driver.find_element_by_xpath(".//*[@id='gadget-10002']//span[2]").text)
+    print (count2)
+    count3 = (driver.find_element_by_xpath(".//*[@id='gadget-10002']//div[1]/a").text)
+    print "count3: %s" % (count3)
+
+    elements_array2 = (driver.find_elements_by_xpath(".//*[@id='gadget-11400']//tbody/tr"))
+    count4 = len(elements_array2)
+    print(count4)
+    count5 = (driver.find_element_by_xpath(".//*[@id='gadget-11400']//div/span[2]").text)
+    print (count5)
+    count6 = (driver.find_element_by_xpath(".//*[@id='gadget-11400']//div/a").text)
+    print (count6)
+    return count1,count2,count3,count4,count5,count6
+
+def test_dva():
+    count1,count2,count3,count4,count5,count6 = test_counts()
+    assert count1 <= int(count2) and count1 <= int(count3)
+
+def test_tri():
+    count1,count2,count3,count4,count5,count6 = test_counts()
+    assert count4 <= int(count5) and count4 <= int(count6)
+
+def test_four():
+    count1,count2,count3,count4,count5,count6 = test_counts()
+    def check_exists_by_xpath(xpath):
+        try:
+            elem = driver.find_element_by_xpath(xpath)
+            return elem is not None
+        #except Exception, e:
+    #   print type(e)
+        except NoSuchElementException:
+            return False
+        return True
+
+    if int(count3) > 9:
+        if not check_exists_by_xpath(".//*[@id='gadget-10002']//div[2]/a[1]"):
+            print "no such element"
+            assert False
+        else:
+            print "est takaya hrenb"
+            assert True
+
+
+    if count6 > 10:
+        if not check_exists_by_xpath(".//*[@id='gadget-11400']//div[2]/a[1]"):
+            print "no such element"
+            assert False
+        elif int((driver.find_element_by_xpath(".//*[@id='gadget-11400']//div[2]/a[1]").text)) == 2:
+            print "i takaya hrenb est"
+            print "inside: %s" % (driver.find_element_by_xpath(".//*[@id='gadget-11400']//div[2]/a[1]").text)
+            assert True
+        else:
+            print "No such element"
+            assert False
