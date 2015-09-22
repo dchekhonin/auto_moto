@@ -34,7 +34,24 @@ def test_login():
     assert_checkbox_status('remember-me', None)
 
     element = driver.find_element_by_id("login").click()
-    time.sleep(3)
+    time.sleep(2)
+    
+    def check_exists_by_xpath(xpath):
+        try:
+            elem = driver.find_element_by_xpath(xpath)
+            return elem is not None
+        #except Exception, e:
+    #   print type(e)
+        except NoSuchElementException:
+            return False
+        return True
+
+    if not check_exists_by_xpath(".//*[@id='header-details-user-fullname']/span/span/img"):
+        #print "no such element"
+        assert False
+    else:
+        #print "est takaya hrenb"
+        assert True
 
 
 def test_counts():
