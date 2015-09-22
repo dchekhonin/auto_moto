@@ -1,1 +1,33 @@
 
+__author__ = 'dchekhonin'
+
+from jira.client import JIRA
+import csv
+import logging
+
+
+
+logging.getLogger().addHandler(logging.StreamHandler())
+
+logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.DEBUG)
+
+fh = logging.FileHandler('/Users/dchekhonin/test_log.log')
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(logFormatter)
+rootLogger.addHandler(fh)
+
+
+options = {
+    'server': 'https://buzzfeed.atlassian.net'
+}
+jira = JIRA(options, basic_auth=('<login>',<password>))
+
+with open('/Users/dchekhonin/jira_txt.txt') as pytxt:
+    for line in pytxt:
+        vername = line.strip()
+        if vername:
+            new_version = jira.create_version(name = vername, project= 'DPTESTXXXX',)
+            rootLogger.debug('Created new version' + str(new_version))
+            print (new_version)
