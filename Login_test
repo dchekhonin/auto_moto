@@ -1,0 +1,42 @@
+__author__ = 'dchekhonin'
+
+import unittest
+from selenium  import webdriver
+
+class HomePage(object):
+    def __init__(self,driver):
+        self.driver = driver
+
+    def login(self,login_name,password):
+        self.driver.find_element_by_xpath(".//label[1]/input").send_keys(login_name)
+        self.driver.find_element_by_xpath(".//label[2]/input").send_keys(password)
+        self.driver.find_element_by_xpath(".//div[1]//button").click()
+        self.driver.implicitly_wait(5)
+        return ResultPage(self.driver)
+
+class ResultPage(object):
+    def __init__(self,driver):
+        self.driver = driver
+
+    def to_be_sure_link(self):
+        return self.driver.find_element_by_xpath(".//header/div/span").text
+
+
+class MyTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.get("http://localhost:8000")
+        self.driver.implicitly_wait(5)
+
+    def tearDown(self):
+        self.driver.close()
+
+    def test_DM_Login(self):
+        home = HomePage(self.driver)
+        result = home.login("<login>","<password>")
+        assert "WebApp API TEST" in result.to_be_sure_link()
+
+
+if __name__ == '__main__':
+    unittest.main()
