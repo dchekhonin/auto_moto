@@ -1,0 +1,42 @@
+
+import unittest
+import settings
+
+
+class Add(object):
+    def __init__(self, x ,y):
+        self.result = x + y
+
+class Sub(object):
+    def __init__(self, x ,y):
+        self.result = x - y
+
+class Mul(object):
+    def __init__(self, x ,y):
+        self.result = x * y
+
+class Div(object):
+    def __init__(self, x ,y):
+        self.result = float(x) / float(y)
+
+class MyTestCase(unittest.TestCase):
+
+    def test_add_result(self):
+        assert Add(settings.First_elem, settings.Second_elem).result == settings.Add_resulting
+
+    def test_sub_result(self):
+        assert Sub(settings.First_elem, settings.Second_elem).result == settings.Sub_resulting
+
+    def test_mul_result(self):
+        assert Mul(settings.First_elem, settings.Second_elem).result == settings.Mul_resulting
+
+    def test_div_result(self):
+        try:
+            settings.Second_elem != 0
+            assert Div(settings.First_elem, settings.Second_elem).result == settings.Div_resulting
+        except ZeroDivisionError:
+            print("Zero Divisioning detected !!!")
+
+
+if __name__ == '__main__':
+    unittest.main()
