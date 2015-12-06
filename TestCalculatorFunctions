@@ -22,21 +22,32 @@ class Div(object):
 class MyTestCase(unittest.TestCase):
 
     def test_add_result(self):
-        assert Add(settings.First_elem, settings.Second_elem).result == settings.Add_resulting
+        try:
+            assert Add(settings.First_elem, settings.Second_elem).result == settings.Add_resulting
+        except AssertionError:
+            raise( AssertionError( "Result of adding is incorrect -> %s should be -> %s" % (settings.Add_resulting,Add(settings.First_elem, settings.Second_elem).result)))
 
     def test_sub_result(self):
-        assert Sub(settings.First_elem, settings.Second_elem).result == settings.Sub_resulting
+        try:
+            assert Sub(settings.First_elem, settings.Second_elem).result == settings.Sub_resulting
+        except AssertionError:
+            raise( AssertionError( "Result of subtraction is incorrect -> %s should be -> %s" % (settings.Sub_resulting,Sub(settings.First_elem, settings.Second_elem).result)))
 
     def test_mul_result(self):
-        assert Mul(settings.First_elem, settings.Second_elem).result == settings.Mul_resulting
+        try:
+            assert Mul(settings.First_elem, settings.Second_elem).result == settings.Mul_resulting
+        except AssertionError:
+            raise( AssertionError( "Result of multiplying is incorrect -> %s should be -> %s" % (settings.Mul_resulting,Mul(settings.First_elem, settings.Second_elem).result)))
 
     def test_div_result(self):
         try:
             settings.Second_elem != 0
-            assert Div(settings.First_elem, settings.Second_elem).result == settings.Div_resulting
+            try:
+                assert Div(settings.First_elem, settings.Second_elem).result == settings.Div_resulting
+            except AssertionError:
+                raise( AssertionError( "Result of dividing is incorrect -> %s should be -> %s" % (settings.Div_resulting,Div(settings.First_elem, settings.Second_elem).result)))
         except ZeroDivisionError:
-            print("Zero Divisioning detected !!!")
-
+            raise ZeroDivisionError("Zero division detected !!!")
 
 if __name__ == '__main__':
     unittest.main()
