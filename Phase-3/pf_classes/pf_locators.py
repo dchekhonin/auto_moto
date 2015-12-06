@@ -20,5 +20,5 @@ sent_mail_to_be_sure_xpath = ".//*[@id='gs_taif50']"
 
 #pf_homepage
 
-sent_mail_menu = ".//*[@id=':5d']//a"
-inbox_mail_menu = ".//*[@id=':59']//a"
+sent_mail_menu = ".//*[@id=':58']//a"
+inbox_mail_menu = ".//*[@id=':54']//a"
